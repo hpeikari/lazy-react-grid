@@ -6,13 +6,13 @@ import styles from './index.scss';
 import { TABLE_NAME } from '../actions';
 
 class GridRows extends Component {
-
   shouldComponentUpdate (nextProps, nextState) {
     if (this.props.uniqueRowIdArr.length === nextProps.uniqueRowIdArr.length
        && this.props.uniqueRowIdArr[0] === nextProps.uniqueRowIdArr[0]) {
       return false;
+    } else {
+      return true;
     }
-    return true;
   }
 
   render () {
@@ -28,12 +28,13 @@ class GridRows extends Component {
     console.log('render <GridRows>')
 
     return (
-      <div className={styles.rowWrapper} style={inlineStyles.rowWrapper}>
+      <div style={inlineStyles.rowWrapper}>
         {
           this.props.uniqueRowIdArr && this.props.uniqueRowIdArr.map((uniqueRowId, index) => {
             return (
               <TextInputGridCell
-                key={`${uniqueRowId}-${index * (Math.random() * 10000)}`}
+                key={uniqueRowId}
+                keyIndex={uniqueRowId}
                 rowHeight={this.props.rowHeight}
                 cellWidth={this.props.cellWidth}
                 uniqueRowId={uniqueRowId}

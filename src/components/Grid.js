@@ -25,6 +25,7 @@ class Grid extends Component {
 
   componentWillUnmount() {
     this.refs.gridWrapper.removeEventListener('scroll', this.handleScroll);
+    console.log('You have unsaved changes...');
   }
 
   initialRowDataLoad() {
@@ -57,7 +58,7 @@ class Grid extends Component {
   }
 
   render() {
-    console.log('render <Grid>')
+//    console.log('render <Grid>')
     const totalScrollHeight = this.props.headerHeight + (this.props.rowCount * this.props.rowHeight);
 
     const inlineStyles = {

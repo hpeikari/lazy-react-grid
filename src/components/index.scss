@@ -50,39 +50,87 @@ html, body {
   }
 }
 
-.rowWrapper {
-//  width: 100%;
-  .rowStyle {
-    display: inline-flex;
-    box-sizing: border-box;
-
-    .gridCell {
-      cursor: pointer;
-      padding: 0 16px;
-      border: none;
-      border-right: 1px solid #D8D8D8;
-      box-sizing: border-box;
+.rowStyle {
+  display: inline-flex;
+  box-sizing: border-box;
 
 
-      &.readOnly {
-        cursor: not-allowed;
-      }
-
-      &:last-child {
-        border: none;
-      }
-    }
-
-    &:nth-of-type(odd) .gridCell {
-      background-color: #F3FDFF;
-    }
-
-    &:nth-of-type(even) .gridCell {
-      background-color: #ffffff;
-    }
-
-    &:hover .gridCell {
-      background-color: #e9f3ff;
-    }
+  &:nth-of-type(odd) .gridCell {
+    background-color: #F3FDFF;
   }
+
+  &:nth-of-type(even) .gridCell {
+    background-color: #ffffff;
+  }
+
+  &:hover .gridCell {
+    background-color: #e9f3ff;
+  }
+}
+
+.gridCell {
+  cursor: pointer;
+  padding: 0 16px;
+  border: none;
+  border-right: 1px solid #D8D8D8;
+  box-sizing: border-box;
+
+  &.errorStyles {
+    background-color: #FFEBEB !important;
+    border: 1px solid #FF9494 !important;
+  }
+
+  &.readOnly {
+    cursor: not-allowed;
+  }
+
+  &:last-child {
+    border: none;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .showTooltipText {
+  visibility: hidden;
+  width: 200px;
+  margin-left: -100px; // negative of half of the width
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 7px;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%;
+  left: 50%;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.tooltip .showTooltipText::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .showTooltipText {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip .hideTooltipText {
+  display: none;
 }

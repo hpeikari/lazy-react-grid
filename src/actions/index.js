@@ -7,6 +7,7 @@ export const FETCH_ROW_DATA = 'llama-grid/FETCH_ROW_DATA';
 export const STORE_ROW_DATA = 'llama-grid/STORE_ROW_DATA';
 export const STORE_COLUMN_DEFS = 'llama-grid/STORE_COLUMN_DEFS';
 export const CHANGE_INPUT_VALUE = 'llama-grid/CHANGE_INPUT_VALUE';
+export const SET_CELL_ERROR_MSG = 'llama-grid/SET_CELL_ERROR_MSG';
 
 export const TABLE_NAME = 'transportation'
 
@@ -56,4 +57,12 @@ export const changeInputValue = (tableName, uniqueRowId, columnName, value) => (
   uniqueRowId,
   columnName,
   value
+});
+
+export const setCellErrorMessage = (tableName, uniqueRowId, columnName, error=null) => ({
+  type: SET_CELL_ERROR_MSG,
+  tableName,
+  uniqueRowId,
+  columnName,
+  error
 });

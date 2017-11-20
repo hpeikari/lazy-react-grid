@@ -4,7 +4,8 @@ import {
   SET_BLOCK_INDEX,
   STORE_ROW_DATA,
   STORE_COLUMN_DEFS,
-  CHANGE_INPUT_VALUE
+  CHANGE_INPUT_VALUE,
+  SET_CELL_ERROR_MSG
 } from '../actions';
 
 export default (state = {}, action) => {
@@ -48,7 +49,29 @@ export default (state = {}, action) => {
         [action.tableName]: {
           ...state[action.tableName] || {},
           rowData: [
-            ...(state[action.tableName].rowData.map((row, idx) => (idx === changedRowIndex) ? { ...row, isChanged: true, [action.columnName]: action.value } :  row ))
+            ...(state[action.tableName].rowData.map((row, idx) => (idx === changedRowIndex) ?
+              { ...row,
+                isChanged: true,
+                [action.columnName]: action.value
+              } : {...row }
+            ))
+          ]
+        }
+      })
+    },
+
+    [SET_CELL_ERROR_MSG]: () => {
+      const changedRowIndex = state[action.tableName].rowData.map((r, index) => (r.uniqueRowId == action.uniqueRowId) ? index : -1).find(n => n>=0);
+      return ({
+        ...state,
+        [action.tableName]: {
+          ...state[action.tableName] || {},
+          rowData: [
+            ...(state[action.tableName].rowData.map((row, idx) => (idx === changedRowIndex) ?
+              { ...row,
+               [`${action.columnName}_error`]: action.error
+              } : {...row }
+            ))
           ]
         }
       })

@@ -12,7 +12,7 @@ const GridHeaders = props => {
     }
   };
 
-  console.log('render <GridHeaders>')
+//  console.log('render <GridHeaders>')
 
   return (
     <div className={styles.headerWrapper}>
