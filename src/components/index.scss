@@ -1,0 +1,88 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+.tmpContainer {
+  width: 50%;
+  height: 100%;
+  margin: 0 auto;
+}
+
+/*********************************/
+
+.gridWrapper {
+  margin: 15px 0;
+  background-color: #EFEFEF;
+  height: 400px; /* configure on page */
+  width: 100%;
+  overflow-y: auto;
+  position: relative;
+}
+
+.gridTable {
+  width: 100%;
+}
+
+.headerWrapper {
+  display: inline-flex;
+  position: sticky;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 2;
+  color: #555555;
+  background-color: #C7C7C7;
+
+  .headerCell {
+    padding: 0 16px;
+    border: none;
+    border-right: 1px solid #d8d8d8;
+    box-sizing: border-box;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+
+    &:hover{
+      background-color: #AFAFAF;
+    }
+  }
+}
+
+.rowWrapper {
+//  width: 100%;
+  .rowStyle {
+    display: inline-flex;
+    box-sizing: border-box;
+
+    .gridCell {
+      cursor: pointer;
+      padding: 0 16px;
+      border: none;
+      border-right: 1px solid #D8D8D8;
+      box-sizing: border-box;
+
+
+      &.readOnly {
+        cursor: not-allowed;
+      }
+
+      &:last-child {
+        border: none;
+      }
+    }
+
+    &:nth-of-type(odd) .gridCell {
+      background-color: #F3FDFF;
+    }
+
+    &:nth-of-type(even) .gridCell {
+      background-color: #ffffff;
+    }
+
+    &:hover .gridCell {
+      background-color: #e9f3ff;
+    }
+  }
+}
