@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { debounce } from 'lodash';
 import GridHeaders from './GridHeaders';
 import GridRows from './GridRows';
 import styles from './index.scss';
 
+import { fetchRowCount, setBlockIndex, fetchRowData, TABLE_NAME } from '../actions';
 import { fetchRowCount, setBlockIndex, fetchRowData, TABLE_NAME } from '../actions';
 
 class Grid extends Component {
@@ -12,6 +14,25 @@ class Grid extends Component {
 
     this.handleScroll = this.handleScroll.bind(this);
     this.initialRowDataLoad = this.initialRowDataLoad.bind(this);
+
+    this.debounceScroll = debounce(event => {
+      const scrollPosition = event.target.scrollTop;
+      const blockHeight = this.props.rowHeight * this.props.blockRowSize; // in px
+      const currentBlockIndex = Math.floor(scrollPosition / blockHeight);
+
+      if (currentBlockIndex !== this.props.blockIndex) {
+        this.props.setBlockIndex(TABLE_NAME, currentBlockIndex);
+
+        const blockStartPxPosition = currentBlockIndex * blockHeight; // in px
+        const blockEndPxPosition = blockStartPxPosition + blockHeight; // in px
+        const rowIdStart = blockStartPxPosition / this.props.rowHeight;
+        const rowIdEnd = blockEndPxPosition / this.props.rowHeight;
+
+        this.props.fetchRowData(TABLE_NAME, {rowIdStart, rowIdEnd});
+
+        console.log('blockIndex ' + currentBlockIndex + ' --> scroll positions: ' + blockStartPxPosition + ' < ' + scrollPosition + ' < ' + blockEndPxPosition + ' --> FetchRowIds('+ rowIdStart + ', '+ rowIdEnd +')' );
+      }
+    }, 100); // throttle delay
   }
 
   componentWillMount() {
@@ -39,22 +60,9 @@ class Grid extends Component {
     this.props.fetchRowData(TABLE_NAME, initialRowIndexRange);
   }
 
+
   handleScroll (event) {
-    const scrollPosition = event.target.scrollTop;
-    const blockHeight = this.props.rowHeight * this.props.blockRowSize; // in px
-    const currentBlockIndex = Math.floor(scrollPosition / blockHeight);
-    if (currentBlockIndex !== this.props.blockIndex) {
-      this.props.setBlockIndex(TABLE_NAME, currentBlockIndex);
-
-      const blockStartPxPosition = currentBlockIndex * blockHeight; // in px
-      const blockEndPxPosition = blockStartPxPosition + blockHeight; // in px
-      const rowIdStart = blockStartPxPosition / this.props.rowHeight;
-      const rowIdEnd = blockEndPxPosition / this.props.rowHeight;
-
-      this.props.fetchRowData(TABLE_NAME, {rowIdStart, rowIdEnd});
-
-      console.log('blockIndex ' + currentBlockIndex + ' --> scroll positions: ' + blockStartPxPosition + ' < ' + scrollPosition + ' < ' + blockEndPxPosition + ' --> FetchRowIds('+ rowIdStart + ', '+ rowIdEnd +')' );
-    }
+    this.debounceScroll(event);
   }
 
   render() {
@@ -72,7 +80,7 @@ class Grid extends Component {
         <div
           style={inlineStyles.gridTable}
           className={styles.gridTable}
-          onScroll={(e) => handleScroll(e)}
+          onScroll={e => this.handleScroll(e)}
         >
           <GridHeaders
             headerHeight={this.props.headerHeight}
