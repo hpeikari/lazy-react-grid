@@ -15,7 +15,7 @@ export default (tableName, totalRowCount) => ({
         precision: 0,
         scale: 0
       }, {
-        allowsNull:false,
+        allowsNull:true,
         baseTableName:null,
         columnName:"field2",
         columnSize:4,
@@ -46,7 +46,7 @@ export default (tableName, totalRowCount) => ({
         columnName:"intField",
         columnSize:4,
         dataTypeName:"int",
-        defaultValue:null,
+        defaultValue:10,
         isKey:false,
         isReadOnly:false,
         isUnique:false,

@@ -5,11 +5,20 @@ import {
   STORE_ROW_DATA,
   STORE_COLUMN_DEFS,
   CHANGE_INPUT_VALUE,
-  SET_CELL_ERROR_MSG
+  SET_CELL_ERROR_MSG,
+  ADD_NEW_ROW
 } from '../actions';
 
 export default (state = {}, action) => {
   const actionMap = {
+    [ADD_NEW_ROW]: () => ({
+      ...state,
+      [action.tableName]: {
+        ...state[action.tableName] || {},
+        newRowData: (state[action.tableName].newRowData || []).concat(action.newRow)
+      }
+    }),
+
     [STORE_COLUMN_DEFS]: () => ({
       ...state,
       [action.tableName]: {

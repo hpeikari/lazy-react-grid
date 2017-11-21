@@ -38,7 +38,7 @@ const TextInputGridCell = (props) => {
     }
   };
 
-  const handleBlur = (value, cell) => {
+  const handleClick = (value, cell) => {
     validate(value, cell);
   }
 
@@ -47,17 +47,17 @@ const TextInputGridCell = (props) => {
     props.changeInputValueAction(TABLE_NAME, props.uniqueRowId, cell.cellColumnName, value);
   };
 
-  console.log('render <TextInputGridCell>', cellData)
+//  console.log('render <TextInputGridCell>')
 
   return (
     <div className={styles.rowStyle}>
       {
         // TODO: create a lookup table for other input "type"s
         cellData && cellData.map((cell, index) => (
-          <span className={styles.tooltip} key={`{${cell.cellColumnName}-${props.keyIndex}`}>
+          <span className={styles.tooltip} key={`cell-{${cell.cellColumnName}-${props.keyIndex}`}>
             <input
               value={cell.cellValue}
-              readOnly={cell.cellColumnDef.isReadOnly}
+              disabled={cell.cellColumnDef.isReadOnly}
               type={cell.cellColumnDef.dataTypeName === 'int' ? 'int' : 'text'}
               style={inlineStyles.rowStyle}
               maxLength={cell.cellColumnDef.columnSize}
@@ -66,7 +66,7 @@ const TextInputGridCell = (props) => {
                 cell.cellError ? styles.errorStyles : '',
                 cell.cellColumnDef.isReadOnly ? styles.readOnly : ''
               ].join(' ')}
-              onBlur={e => handleBlur(e.target.value, cell)}
+              onClick={e => handleClick(e.target.value, cell)}
               onChange={e => handleChange(e.target.value, cell)}
             />
             <span className={cell.cellError ? styles.showTooltipText : styles.hideTooltipText}>{cell.cellError}</span>
@@ -79,7 +79,7 @@ const TextInputGridCell = (props) => {
 
 const mapStateToProps = ({grid}, props) => ({
   colDefs: (grid[TABLE_NAME] && grid[TABLE_NAME].colDefs) || [],
-  row: (grid[TABLE_NAME] && grid[TABLE_NAME].rowData.find(r => r.uniqueRowId === props.uniqueRowId)) || []
+  row: (grid[TABLE_NAME] && grid[TABLE_NAME].rowData && grid[TABLE_NAME].rowData.find(r => r.uniqueRowId === props.uniqueRowId)) || []
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -8,6 +8,7 @@ export const STORE_ROW_DATA = 'llama-grid/STORE_ROW_DATA';
 export const STORE_COLUMN_DEFS = 'llama-grid/STORE_COLUMN_DEFS';
 export const CHANGE_INPUT_VALUE = 'llama-grid/CHANGE_INPUT_VALUE';
 export const SET_CELL_ERROR_MSG = 'llama-grid/SET_CELL_ERROR_MSG';
+export const ADD_NEW_ROW = 'llama-grid/ADD_NEW_ROW';
 
 export const TABLE_NAME = 'transportation'
 
@@ -20,6 +21,12 @@ export const fetchRowData = (dispatch, tableName, rowIndexRange) => {
   dispatch(storeRowData(tableName, rowDataInRange));
   return { type: FETCH_ROW_DATA }
 };
+
+export const addNewRow = (tableName , newRow) => ({
+  type: ADD_NEW_ROW,
+  tableName,
+  newRow
+});
 
 export const storeColumnDefs = (tableName , colDefs) => ({
   type: STORE_COLUMN_DEFS,

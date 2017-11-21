@@ -4,7 +4,7 @@ html, body {
 }
 
 .tmpContainer {
-  width: 50%;
+  width: 60%;
   height: 100%;
   margin: 0 auto;
 }
@@ -12,8 +12,9 @@ html, body {
 /*********************************/
 
 .gridWrapper {
+  display: grid;
   margin: 15px 0;
-  background-color: #EFEFEF;
+  background-color: #F7F7F7;
   height: 400px; /* configure on page */
   width: 100%;
   overflow-y: auto;
@@ -22,41 +23,74 @@ html, body {
 
 .gridTable {
   width: 100%;
+  font-family: Arial;
 }
 
+/**********************************/
+
 .headerWrapper {
-  display: inline-flex;
+  display: block;
+  width: 100%;
   position: sticky;
   top: 0;
   right: 0;
   left: 0;
   z-index: 2;
-  color: #555555;
-  background-color: #C7C7C7;
+  color: #888;
+  background-color: #eee;
+}
 
-  .headerCell {
-    padding: 0 16px;
-    border: none;
-    border-right: 1px solid #d8d8d8;
-    box-sizing: border-box;
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    font-weight: 700;
+.headerCell {
+  display: inline-flex;
+  padding: 0 16px;
+  border: none;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 13px;
 
-    &:hover{
-      background-color: #AFAFAF;
-    }
+  &:hover{
+    cursor: pointer;
+    color: #505050;
+    background-color: #D0D0D0;
   }
+}
+
+.columnHeaderWrapper {
+  display: flex;
+}
+
+.addNewRowBtn {
+  display: flex;
+  user-select: none;
+  color: #288dc8;
+  background-color: #bedcee;
+  cursor: pointer;
+  width: 100%;
+  padding-left: 12px;
+  align-items: center;
+  box-sizing: border-box;
+  font-size: 11px;
+  font-weight: 500;
+
+  &:hover {
+//    background-color: $very-light-blue;
+  }
+}
+
+/************************************/
+
+.rowContainer {
+  display: block;
 }
 
 .rowStyle {
   display: inline-flex;
   box-sizing: border-box;
 
-
   &:nth-of-type(odd) .gridCell {
-    background-color: #F3FDFF;
+    background-color: #f9fcfd;
   }
 
   &:nth-of-type(even) .gridCell {
@@ -69,7 +103,8 @@ html, body {
 }
 
 .gridCell {
-  cursor: pointer;
+  color: #666;
+  cursor: cell;
   padding: 0 16px;
   border: none;
   border-right: 1px solid #D8D8D8;
@@ -77,7 +112,7 @@ html, body {
 
   &.errorStyles {
     background-color: #FFEBEB !important;
-    border: 1px solid #FF9494 !important;
+    border-bottom: 2px solid #FF9494 !important;
   }
 
   &.readOnly {
@@ -89,14 +124,16 @@ html, body {
   }
 
   &:focus {
+    cursor: text;
     outline: none;
+    border-bottom: 2px solid #288dc8;
   }
 }
 
+/***************************************/
 .tooltip {
   position: relative;
   display: inline-block;
-  border-bottom: 1px dotted black;
 }
 
 .tooltip .showTooltipText {

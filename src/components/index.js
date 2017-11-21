@@ -10,8 +10,9 @@ class App extends Component {
       <div className={styles.tmpContainer}>
         Demo for LLama-Grid:
         <Grid
-          rowHeight={25}
           headerHeight={40}
+          rowHeight={25}
+          btnHeight={25}
           cellWidth={150}
           blockRowSize={100}
         >

@@ -59,7 +59,7 @@ class Grid extends Component {
 
   render() {
 //    console.log('render <Grid>')
-    const totalScrollHeight = this.props.headerHeight + (this.props.rowCount * this.props.rowHeight);
+    const totalScrollHeight = this.props.headerHeight + ((this.props.rowCount + this.props.newRowCount) * this.props.rowHeight);
 
     const inlineStyles = {
       gridTable: {
@@ -76,11 +76,13 @@ class Grid extends Component {
         >
           <GridHeaders
             headerHeight={this.props.headerHeight}
+            btnHeight={this.props.btnHeight}
             cellWidth={this.props.cellWidth}
           />
           <GridRows
             rowHeight={this.props.rowHeight}
             headerHeight={this.props.headerHeight}
+            btnHeight={this.props.btnHeight}
             cellWidth={this.props.cellWidth}
             blockIndex={this.props.blockIndex}
             blockRowSize={this.props.blockRowSize}
@@ -93,7 +95,8 @@ class Grid extends Component {
 
 const mapStateToProps = ({grid}) => ({
   blockIndex: (grid[TABLE_NAME] && grid[TABLE_NAME].blockIndex) || 0,
-  rowCount: (grid[TABLE_NAME] && grid[TABLE_NAME].rowCount) || 0
+  rowCount: (grid[TABLE_NAME] && grid[TABLE_NAME].rowCount) || 0,
+  newRowCount: (grid[TABLE_NAME] && grid[TABLE_NAME].newRowData && grid[TABLE_NAME].newRowData.length) || 0 // TODO: iterate through newRowData and check for newly created only
 });
 
 const mapDispatchToProps = dispatch => ({
