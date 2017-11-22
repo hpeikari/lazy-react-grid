@@ -6,7 +6,6 @@ import GridRows from './GridRows';
 import styles from './index.scss';
 
 import { fetchRowCount, setBlockIndex, fetchRowData, TABLE_NAME } from '../actions';
-import { fetchRowCount, setBlockIndex, fetchRowData, TABLE_NAME } from '../actions';
 
 class Grid extends Component {
   constructor(props) {
@@ -15,8 +14,7 @@ class Grid extends Component {
     this.handleScroll = this.handleScroll.bind(this);
     this.initialRowDataLoad = this.initialRowDataLoad.bind(this);
 
-    this.debounceScroll = debounce(event => {
-      const scrollPosition = event.target.scrollTop;
+    this.debounceScroll = debounce(scrollPosition => {
       const blockHeight = this.props.rowHeight * this.props.blockRowSize; // in px
       const currentBlockIndex = Math.floor(scrollPosition / blockHeight);
 
@@ -32,7 +30,7 @@ class Grid extends Component {
 
         console.log('blockIndex ' + currentBlockIndex + ' --> scroll positions: ' + blockStartPxPosition + ' < ' + scrollPosition + ' < ' + blockEndPxPosition + ' --> FetchRowIds('+ rowIdStart + ', '+ rowIdEnd +')' );
       }
-    }, 100); // throttle delay
+    }, 50); // throttle delay
   }
 
   componentWillMount() {
@@ -62,39 +60,45 @@ class Grid extends Component {
 
 
   handleScroll (event) {
-    this.debounceScroll(event);
+    const scrollPosition = event.target.scrollTop;
+    this.debounceScroll(scrollPosition);
   }
 
   render() {
 //    console.log('render <Grid>')
-    const totalScrollHeight = this.props.headerHeight + ((this.props.rowCount + this.props.newRowCount) * this.props.rowHeight);
+    const totalScrollHeight = ((this.props.rowCount + this.props.newRowCount) * this.props.rowHeight);
 
     const inlineStyles = {
-      gridTable: {
-        height: totalScrollHeight
+      scrollableContainerWrapper: {
+        height: 400,
+        overflow: 'scroll'
+      },
+      scrollableContainer: {
+        height: totalScrollHeight,
+        position: 'relative'
       }
     };
 
     return (
       <div ref='gridWrapper' className={styles.gridWrapper}>
         <div
-          style={inlineStyles.gridTable}
           className={styles.gridTable}
-          onScroll={e => this.handleScroll(e)}
         >
           <GridHeaders
             headerHeight={this.props.headerHeight}
             btnHeight={this.props.btnHeight}
             cellWidth={this.props.cellWidth}
           />
-          <GridRows
-            rowHeight={this.props.rowHeight}
-            headerHeight={this.props.headerHeight}
-            btnHeight={this.props.btnHeight}
-            cellWidth={this.props.cellWidth}
-            blockIndex={this.props.blockIndex}
-            blockRowSize={this.props.blockRowSize}
-          />
+          <div onScroll={e => this.handleScroll(e)} style={inlineStyles.scrollableContainerWrapper}>
+            <div style={inlineStyles.scrollableContainer}>
+              <GridRows
+                rowHeight={this.props.rowHeight}
+                cellWidth={this.props.cellWidth}
+                blockIndex={this.props.blockIndex}
+                blockRowSize={this.props.blockRowSize}
+              />
+            </div>
+          </div>
         </div>
       </div>
     );

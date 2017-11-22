@@ -16,7 +16,7 @@ class GridRows extends Component {
   }
 
   render () {
-    const viewportPosition = this.props.headerHeight + this.props.btnHeight + (this.props.blockIndex * this.props.blockRowSize * this.props.rowHeight);
+    const viewportPosition = (this.props.blockIndex * this.props.blockRowSize * this.props.rowHeight);
 
     const inlineStyles = {
       rowContainer: {

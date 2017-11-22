@@ -7,18 +7,22 @@ html, body {
   width: 60%;
   height: 100%;
   margin: 0 auto;
+  display: block;
 }
 
 /*********************************/
 
 .gridWrapper {
-  display: grid;
+  display: flex;
   margin: 15px 0;
   background-color: #F7F7F7;
-  height: 400px; /* configure on page */
+//  height: 400px; /* configure on page */
   width: 100%;
-  overflow-y: auto;
+//  overflow-y: auto;
   position: relative;
+
+  height: initial;
+  overflow: unset;
 }
 
 .gridTable {
