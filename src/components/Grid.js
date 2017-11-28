@@ -88,7 +88,6 @@ class Grid extends Component {
 
     const inlineStyles = {
       scrollableContainerWrapper: {
-        height: 400,
         overflow: 'scroll',
         display: 'block'
       },
@@ -109,7 +108,11 @@ class Grid extends Component {
             cellWidth={this.props.cellWidth}
             scrollBarWidth={this.scrollBarWidth}
           />
-          <div onScroll={e => this.handleScroll(e)} style={inlineStyles.scrollableContainerWrapper}>
+          <div
+            onScroll={e => this.handleScroll(e)}
+            style={inlineStyles.scrollableContainerWrapper}
+            className={styles.scrollableContainerWrapper}
+          >
             <div style={inlineStyles.scrollableContainer}>
               <GridRows
                 rowHeight={this.props.rowHeight}
