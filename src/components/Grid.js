@@ -98,7 +98,13 @@ class Grid extends Component {
     };
 
     return (
-      <div ref='gridWrapper' className={styles.gridWrapper}>
+      <div
+        ref='gridWrapper'
+        className={[
+          styles.gridWrapper,
+          this.props.className
+          ].join(' ')}
+      >
         <div
           className={styles.gridTable}
         >

@@ -15,6 +15,7 @@ class App extends Component {
           btnHeight={20}
           cellWidth={150}
           blockRowSize={100}
+          className={styles.gridClass}
         >
         </Grid>
       </div>
