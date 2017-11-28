@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { debounce } from 'lodash';
 import GridHeaders from './GridHeaders';
 import GridRows from './GridRows';
+import { getScrollbarWidth } from '../utils';
 import styles from './index.scss';
 
 import { fetchRowCount, setBlockIndex, fetchRowData, TABLE_NAME } from '../actions';
@@ -11,8 +12,13 @@ class Grid extends Component {
   constructor(props) {
     super(props);
 
+    this.scrollTop = 0;
+    this.scrollLeft = 0;
+    this.syncScrolls = this.syncScrolls.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
     this.initialRowDataLoad = this.initialRowDataLoad.bind(this);
+    this.scrollBarWidth = getScrollbarWidth();
+
 
     this.debounceScroll = debounce(scrollPosition => {
       const blockHeight = this.props.rowHeight * this.props.blockRowSize; // in px
@@ -58,10 +64,22 @@ class Grid extends Component {
     this.props.fetchRowData(TABLE_NAME, initialRowIndexRange);
   }
 
+  handleScroll(event) {
+    const scrollTopPosition = event.target.scrollTop;
+    const scrollLeftPosition = event.target.scrollLeft;
 
-  handleScroll (event) {
-    const scrollPosition = event.target.scrollTop;
-    this.debounceScroll(scrollPosition);
+    if (this.scrollTop !== scrollTopPosition) { // vertical scroll
+      this.scrollTop = scrollTopPosition;
+      this.debounceScroll(scrollTopPosition);
+    } else if (this.scrollLeft !== scrollLeftPosition) { // horizontal scroll
+      this.syncScrolls(scrollLeftPosition);
+    }
+  }
+
+  syncScrolls(scrollLeftPosition) {
+    this.scrollLeft = scrollLeftPosition;
+    const colWrapperElement = document.getElementById('llamaLazyGrid_columnsWrapper');
+    colWrapperElement.scrollLeft = scrollLeftPosition;
   }
 
   render() {
@@ -71,7 +89,8 @@ class Grid extends Component {
     const inlineStyles = {
       scrollableContainerWrapper: {
         height: 400,
-        overflow: 'scroll'
+        overflow: 'scroll',
+        display: 'block'
       },
       scrollableContainer: {
         height: totalScrollHeight,
@@ -88,6 +107,7 @@ class Grid extends Component {
             headerHeight={this.props.headerHeight}
             btnHeight={this.props.btnHeight}
             cellWidth={this.props.cellWidth}
+            scrollBarWidth={this.scrollBarWidth}
           />
           <div onScroll={e => this.handleScroll(e)} style={inlineStyles.scrollableContainerWrapper}>
             <div style={inlineStyles.scrollableContainer}>

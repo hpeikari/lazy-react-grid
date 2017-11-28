@@ -6,8 +6,16 @@ import styles from './index.scss';
 import { TABLE_NAME } from '../actions';
 
 const GridHeaders = props => {
+  const headerWidth = (props.cellWidth * props.colCount) + props.scrollBarWidth;
+
   const inlineStyles = {
-    headerWrapper: {
+    columnsWrapper: {
+      overflowX: 'hidden'
+    },
+    columnHeaderWrapper: {
+      width: headerWidth
+    },
+    headerCell: {
       height: props.headerHeight,
       width: props.cellWidth
     }
@@ -17,14 +25,16 @@ const GridHeaders = props => {
 
   return (
     <div className={styles.headerWrapper}>
-      <div className={styles.columnHeaderWrapper}>
-        {
-          Object.keys(props.colDefs).map(col => col).map(columnName => (
-            <div className={styles.headerCell} style={inlineStyles.headerWrapper} key={columnName}>
-              {columnName}
-            </div>
-          ))
-        }
+      <div id='llamaLazyGrid_columnsWrapper' style={inlineStyles.columnsWrapper}>
+        <div className={styles.columnHeaderWrapper} style={inlineStyles.columnHeaderWrapper}>
+          {
+            Object.keys(props.colDefs).map(col => col).map(columnName => (
+              <div className={styles.headerCell} style={inlineStyles.headerCell} key={columnName}>
+                {columnName}
+              </div>
+            ))
+          }
+        </div>
       </div>
       <AddNewRowButton
         btnHeight={props.btnHeight}
@@ -34,9 +44,13 @@ const GridHeaders = props => {
   )
 };
 
-const mapStateToProps = ({grid}) => ({
-  colDefs: (grid[TABLE_NAME] && grid[TABLE_NAME].colDefs) || []
-});
+const mapStateToProps = ({grid}) => {
+  const colDefs = (grid[TABLE_NAME] && grid[TABLE_NAME].colDefs) || {}
+  return {
+    colDefs,
+    colCount: Object.keys(colDefs).length
+  }
+};
 
 const mapDispatchToProps = dispatch => ({});
 

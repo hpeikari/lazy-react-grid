@@ -12,7 +12,7 @@ class App extends Component {
         <Grid
           headerHeight={40}
           rowHeight={25}
-          btnHeight={25}
+          btnHeight={20}
           cellWidth={150}
           blockRowSize={100}
         >

@@ -22,7 +22,8 @@ const AddNewRowButton = props => {
     const totalRowCount = props.rowCount + props.newRowCount;
     const newRowWithUniqueId = {
       uniqueRowId: totalRowCount|| 0,
-      __pinned__: 'top', // TODO: is prefix/suffix with __ is a good convention to distinguish between real cols vs virtual cols? how about __uniqueRowId__ ?
+      // TODO: is prefix/suffix with __ a good convention to distinguish between real cols from backend vs helper cols created by grid? how about __uniqueRowId__ ?
+      __pinned__: 'top',
       ...newRow
     };
 
