@@ -1,46 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import TextInputCell from './TextInputCell';
 import styles from './index.scss';
-import { isNumeric, valueFormatterForString } from '../utils';
-import { TABLE_NAME, changeInputValue, setCellErrorMessage } from '../actions';
+import { valueFormatterForString } from '../utils';
+import { TABLE_NAME } from '../actions';
 
 const GridRow = (props) => {
-  const inlineStyles = {
-    cellStyle: {
-      height: props.rowHeight,
-      width: props.cellWidth
-    }
-  };
-
-  const validate = (val, cell) => {
-    const value = val.trim();
-    let error = null;
-    if (!cell.cellColumnDef.allowsNull && !!value && !value.length) {
-      error = 'This field is required.';
-    } else if (value.length > cell.cellColumnDef.columnSize) {
-      error = 'The entered value is too long.';
-    } else if (['float', 'int'].indexOf(cell.cellColumnDef.dataTypeName) > 0 && !isNumeric(value)) {
-      error = 'Enter a numeric value.';
-    }
-
-    // dispatch only if error has changed
-    if (cell.cellError !== error) {
-      props.setCellErrorMessageAction(TABLE_NAME, props.uniqueRowId, !!(props.cellData['__pinned__']), cell.cellColumnName, error);
-    }
-  };
-
-
-  const handleClick = (value, cell) => {
-    validate(value, cell);
-  }
-
-
-  // TODO: implement a debounce
-  const handleChange = (value, cell) => {
-    validate(value, cell);
-    props.changeInputValueAction(TABLE_NAME, props.uniqueRowId, !!(props.cellData['__pinned__']), cell.cellColumnName, value);
-  };
-
   // transform data for increased readability
   const cellData = Object.keys(props.colDefs).map(columnName => ({
     cellValue: valueFormatterForString(props.row[columnName]),
@@ -49,7 +14,7 @@ const GridRow = (props) => {
     cellColumnDef: props.colDefs[columnName]
   }));
 
-// TODO optimize so all cells are rendered with small changes
+// TODO optimize rendering
 //  console.log('render <GridRow>')
 
   return (
@@ -60,31 +25,17 @@ const GridRow = (props) => {
       ].join(' ')}
     >
       {
-        // TODO create lookup table and logic to use diff cell editors
         cellData && cellData.map((cell, index) => (
+          // TODO create lookup table and logic to use diff cell editors
           // TEXT-INPUT cell editor:
-          <span
+          <TextInputCell
             key={`cell-${props.uniqueRowId}-{${cell.cellColumnName}`}
-            className={styles.tooltip}
-          >
-            <input
-              value={cell.cellValue}
-              placeholder='null'
-              disabled={cell.cellColumnDef.isReadOnly}
-              type={cell.cellColumnDef.dataTypeName === 'int' ? 'int' : 'text'}
-              style={inlineStyles.cellStyle}
-              maxLength={cell.cellColumnDef.columnSize}
-              className={[
-                styles.gridCell,
-                !cell.cellError && props.row['__pinned__'] ? styles.pinnedTopCell : '',
-                cell.cellError ? styles.errorStyles : '',
-                cell.cellColumnDef.isReadOnly ? styles.readOnly : ''
-              ].join(' ')}
-              onClick={e => handleClick(e.target.value, cell)}
-              onChange={e => handleChange(e.target.value, cell)}
-            />
-            <span className={cell.cellError ? styles.showTooltipText : styles.hideTooltipText}>{cell.cellError}</span>
-          </span>
+            cellData={cell}
+            uniqueRowId={props.uniqueRowId}
+            isPinned={!!(props.row['__pinned__'])}
+            rowHeight={props.rowHeight}
+            cellWidth={props.cellWidth}
+          />
         ))
      }
     </div>
@@ -100,9 +51,6 @@ const mapStateToProps = ({grid}, props) => {
   }
 };
 
-const mapDispatchToProps = dispatch => ({
-  changeInputValueAction: (tableName, uniqueRowId, isPinned, columnName, value) => dispatch(changeInputValue(tableName, uniqueRowId, isPinned, columnName, value)),
-  setCellErrorMessageAction: (tableName, uniqueRowId, isPinned, columnName, error) => dispatch(setCellErrorMessage(tableName, uniqueRowId, isPinned, columnName, error)),
-});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(GridRow);
