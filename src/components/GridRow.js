@@ -14,6 +14,9 @@ const GridRow = (props) => {
     cellColumnDef: props.colDefs[columnName]
   }));
 
+  const handleBlur = (event, uniqueRowId) => {
+    console.log('on blur .... rowId: ', uniqueRowId, cellData)
+  }
 // TODO optimize rendering
 //  console.log('render <GridRow>')
 
@@ -23,6 +26,7 @@ const GridRow = (props) => {
         styles.rowStyle,
         props.row['__pinned__'] === 'top' ? styles.pinnedTopRow : ''
       ].join(' ')}
+      onBlur={e => handleBlur(e, props.uniqueRowId)}
     >
       {
         cellData && cellData.map((cell, index) => (
