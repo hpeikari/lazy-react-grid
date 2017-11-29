@@ -13,8 +13,8 @@ class App extends Component {
           headerHeight={40}
           rowHeight={25}
           btnHeight={20}
-          cellWidth={150}
-          blockRowSize={100}
+          cellWidth={200}
+          blockRowSize={50}
           className={styles.gridClass}
         >
         </Grid>

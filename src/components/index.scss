@@ -80,7 +80,7 @@ div {
   display: flex;
   user-select: none;
   color: #288dc8;
-  background-color: #bedcee;
+  background-color: #D6EAF7;
   cursor: pointer;
   width: 100%;
   padding-left: 12px;
@@ -117,6 +117,15 @@ div {
   }
 }
 
+.pinnedTopRow {
+  top: 0;
+  z-index: 2;
+  position: sticky;
+}
+
+/************************************/
+
+
 .gridCell {
   color: #666;
   cursor: cell;
@@ -125,9 +134,18 @@ div {
   border-right: 1px solid #D8D8D8;
   box-sizing: border-box;
 
+  &.pinnedTopCell {
+    background-color: #D6EAF7 !important;
+  }
+
   &.errorStyles {
     background-color: #FFEBEB !important;
     border-bottom: 2px solid #FF9494 !important;
+  }
+
+  &::placeholder {
+    color: #B2B2B2;
+    font-style: italic;
   }
 
   &.readOnly {

@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import TextInputGridCell from './TextInputGridCell';
+import GridRow from './GridRow';
 import styles from './index.scss';
 
 import { TABLE_NAME } from '../actions';
 
 class GridRows extends Component {
   shouldComponentUpdate (nextProps, nextState) {
-    if (this.props.uniqueRowIdArr.length === nextProps.uniqueRowIdArr.length
-       && this.props.uniqueRowIdArr[0] === nextProps.uniqueRowIdArr[0]) {
+    if (this.props.totalRowCount === nextProps.totalRowCount // no change in the total number of rows
+        && this.props.rowDataArr[0] === nextProps.rowDataArr[0]) {  // new block of rows is not fetched
       return false;
-    } else {
-      return true;
     }
+
+    return true;
   }
 
   render () {
@@ -30,31 +30,18 @@ class GridRows extends Component {
     return (
       <div className={styles.rowContainer} style={inlineStyles.rowContainer}>
         {
-          // TODO: refactor such that we concat the array of pinned with non-pinned
-          // (i.e. newRowData with rowData) and then map through the array in sequence
-          //  this.props.newUniqueRowIdArr && this.props.newUniqueRowIdArr.map((uniqueRowId, index) => {
-          //    return (
-          //      <TextInputGridCell
-          //        key={`userRow-${uniqueRowId}`}
-          //        keyIndex={uniqueRowId}
-          //        rowHeight={this.props.rowHeight}
-          //        cellWidth={this.props.cellWidth}
-          //        uniqueRowId={uniqueRowId}
-          //        />
-          //    )}
-          //  )
-        }
-        {
-          this.props.uniqueRowIdArr && this.props.uniqueRowIdArr.map((uniqueRowId, index) => {
-            return (
-              <TextInputGridCell
-                key={`userRow-${uniqueRowId}`}
-                keyIndex={uniqueRowId}
+          // merge the two row data arrays so we can render them together
+
+          this.props.newRowDataArr.concat(this.props.rowDataArr)
+          .map((row, index) => (
+              <GridRow
+                key={`gridRowData-${row.uniqueRowId}`}
+                uniqueRowId={row.uniqueRowId}
+                cellData={row}
                 rowHeight={this.props.rowHeight}
                 cellWidth={this.props.cellWidth}
-                uniqueRowId={uniqueRowId}
               />
-            )}
+            )
           )
         }
       </div>
@@ -62,11 +49,19 @@ class GridRows extends Component {
   };
 };
 
-const mapStateToProps = ({grid}) => ({
-  blockIndex: (grid[TABLE_NAME] && grid[TABLE_NAME].blockIndex) || 0,
-  uniqueRowIdArr: (grid[TABLE_NAME] && grid[TABLE_NAME].rowData && grid[TABLE_NAME].rowData.map(r => r.uniqueRowId)) || [],
-  newUniqueRowIdArr: (grid[TABLE_NAME] && grid[TABLE_NAME].newRowData && grid[TABLE_NAME].newRowData.map(r => r.uniqueRowId)) || []
-});
+const mapStateToProps = ({grid}) => {
+  const rowDataArr = (grid[TABLE_NAME] && grid[TABLE_NAME].rowData && grid[TABLE_NAME].rowData) || [];
+  const newRowDataArr = (grid[TABLE_NAME] && grid[TABLE_NAME].newRowData && grid[TABLE_NAME].newRowData) || [];
+
+  const rowDataUniqueRowIdArr = rowDataArr.map(r => r.uniqueRowId) || [];
+  const newRowDataUniqueRowIdArr = newRowDataArr.map(r => r.uniqueRowId) || [];
+  return {
+    blockIndex: (grid[TABLE_NAME] && grid[TABLE_NAME].blockIndex) || 0,
+    rowDataArr,
+    newRowDataArr,
+    totalRowCount: newRowDataUniqueRowIdArr.length + rowDataUniqueRowIdArr.length
+  }
+}
 
 const mapDispatchToProps = dispatch => ({});
 

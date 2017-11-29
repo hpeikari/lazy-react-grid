@@ -52,13 +52,14 @@ export default (state = {}, action) => {
     }),
 
     [CHANGE_INPUT_VALUE]: () => {
-      const changedRowIndex = state[action.tableName].rowData.map((r, index) => (r.uniqueRowId == action.uniqueRowId) ? index : -1).find(n => n>=0);
+      const rowDataSet = action.isPinned ? 'newRowData' : 'rowData';
+      const changedRowIndex = state[action.tableName][rowDataSet].map((r, index) => (r.uniqueRowId == action.uniqueRowId) ? index : -1).find(n => n>=0);
       return ({
         ...state,
         [action.tableName]: {
           ...state[action.tableName] || {},
-          rowData: [
-            ...(state[action.tableName].rowData.map((row, idx) => (idx === changedRowIndex) ?
+          [rowDataSet]: [
+            ...(state[action.tableName][rowDataSet].map((row, idx) => (idx === changedRowIndex) ?
               { ...row,
                 isChanged: true,
                 [action.columnName]: action.value
@@ -70,13 +71,14 @@ export default (state = {}, action) => {
     },
 
     [SET_CELL_ERROR_MSG]: () => {
-      const changedRowIndex = state[action.tableName].rowData.map((r, index) => (r.uniqueRowId == action.uniqueRowId) ? index : -1).find(n => n>=0);
+      const rowDataSet = action.isPinned ? 'newRowData' : 'rowData';
+      const changedRowIndex = state[action.tableName][rowDataSet].map((r, index) => (r.uniqueRowId == action.uniqueRowId) ? index : -1).find(n => n>=0);
       return ({
         ...state,
         [action.tableName]: {
           ...state[action.tableName] || {},
-          rowData: [
-            ...(state[action.tableName].rowData.map((row, idx) => (idx === changedRowIndex) ?
+          [rowDataSet]: [
+            ...(state[action.tableName][rowDataSet].map((row, idx) => (idx === changedRowIndex) ?
               { ...row,
                [`${action.columnName}_error`]: action.error
               } : {...row }

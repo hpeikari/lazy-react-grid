@@ -41,11 +41,16 @@ class Grid extends Component {
 
   componentWillMount() {
     this.props.fetchRowCount(TABLE_NAME);
-    this.initialRowDataLoad();  // TODO: this must be called after rowCount is set
   }
 
   componentDidMount() {
     this.refs.gridWrapper.addEventListener('scroll', this.handleScroll);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.rowCount > 0) {
+      this.initialRowDataLoad(nextProps.rowCount); // this must be called after rowCount is set
+    }
   }
 
   componentWillUnmount() {
@@ -53,12 +58,10 @@ class Grid extends Component {
     console.log('You have unsaved changes...');
   }
 
-  initialRowDataLoad() {
-    console.log('initial data load... ' + this.props.rowCount);
-
+  initialRowDataLoad(rowCount ) {
     const initialRowIndexRange = {
       rowIdStart: 0,
-      rowIdEnd: Math.min(this.props.rowCount, this.props.blockRowSize)
+      rowIdEnd: Math.min(rowCount, this.props.blockRowSize)
     };
 
     this.props.fetchRowData(TABLE_NAME, initialRowIndexRange);

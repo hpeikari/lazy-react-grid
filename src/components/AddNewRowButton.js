@@ -12,17 +12,15 @@ const AddNewRowButton = props => {
   };
 
   const addNewRowHandler = (tableName, colDefs) => {
-    const newRow = colDefs && Object.keys(props.colDefs).map(col => {
-      return ({
-        [col]: colDefs[col].defaultValue || null
-        })
-      })
-      .reduce((res, cur) => ({...res, ...cur}));
+    const newRow = colDefs && Object.keys(props.colDefs).map(col => ({
+      [col]: colDefs[col].defaultValue || null
+    })).reduce((res, cur) => ({...res, ...cur}));
 
     const totalRowCount = props.rowCount + props.newRowCount;
     const newRowWithUniqueId = {
       uniqueRowId: totalRowCount|| 0,
-      // TODO: is prefix/suffix with __ a good convention to distinguish between real cols from backend vs helper cols created by grid? how about __uniqueRowId__ ?
+      // TODO: is prefix/suffix with __ a good convention to distinguish between
+      // real cols from backend vs helper cols created by grid? how about __uniqueRowId__ ?
       __pinned__: 'top',
       ...newRow
     };
@@ -31,14 +29,15 @@ const AddNewRowButton = props => {
     props.addNewRowAction(tableName, newRowWithUniqueId);
   }
 
-  return ( // TODO: tableData && tableData.rowData && !hasnewRowData &&
+  return props.newRowCount ? null : (
     <div
-    className={styles.addNewRowBtn}
-    style={inlineStyles.addNewRowBtn}
-    onClick={() => addNewRowHandler(TABLE_NAME, props.colDefs)}>
+      className={styles.addNewRowBtn}
+      style={inlineStyles.addNewRowBtn}
+      onClick={() => addNewRowHandler(TABLE_NAME, props.colDefs)}
+    >
     + ADD NEW RECORD
-      </div>
-    );
+    </div>
+  );
 };
 
 

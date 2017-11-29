@@ -1,3 +1,22 @@
+/********************************************************
+      Equality Checks
+********************************************************/
+export const isNumeric = (n) => {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+
+/********************************************************
+      Value Formatters
+*********************************************************/
+export const valueFormatterForString = (value) => {
+  return ((value !== null) && (value !== undefined) && value.toString()) || '';
+};
+
+
+/********************************************************
+        miscellaneous
+********************************************************/
 export const getScrollbarWidth = () => {
   var outer = document.createElement("div");
   outer.style.visibility = "hidden";
@@ -20,10 +39,3 @@ export const getScrollbarWidth = () => {
 
   return widthNoScroll - widthWithScroll;
 }
-
-
-//isNumeric function
-export const isNumeric = (n) => {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-}
-

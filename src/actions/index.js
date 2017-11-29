@@ -12,7 +12,7 @@ export const ADD_NEW_ROW = 'llama-grid/ADD_NEW_ROW';
 
 export const TABLE_NAME = 'transportation'
 
-const totalRowCount = 5000;
+const totalRowCount = 1000000; // for some reason it can't render properly if rowCount is greater than 1,342,200
 const rowDataArray = getRowDataArray(TABLE_NAME, totalRowCount);
 
 export const fetchRowData = (dispatch, tableName, rowIndexRange) => {
@@ -58,18 +58,20 @@ export const setBlockIndex = (tableName, blockIndex) => ({
   blockIndex
 });
 
-export const changeInputValue = (tableName, uniqueRowId, columnName, value) => ({
+export const changeInputValue = (tableName, uniqueRowId, isPinned, columnName, value) => ({
   type: CHANGE_INPUT_VALUE,
   tableName,
   uniqueRowId,
+  isPinned,
   columnName,
   value
 });
 
-export const setCellErrorMessage = (tableName, uniqueRowId, columnName, error=null) => ({
+export const setCellErrorMessage = (tableName, uniqueRowId, isPinned, columnName, error = null) => ({
   type: SET_CELL_ERROR_MSG,
   tableName,
   uniqueRowId,
+  isPinned,
   columnName,
   error
 });
